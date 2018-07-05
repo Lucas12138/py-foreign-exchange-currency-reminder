@@ -36,14 +36,14 @@ class Reminder(object):
 		y_usd = []
 		y_aud = []
 		y_jpy = []
-		last_week_date = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(-29)
+		last_month_date = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(-29)
 		count_date = 0
 		while count_date < 30:
-			x.append(last_week_date.strftime('%Y-%m-%d'))
-			y_usd.append(cur.get_rate('USD', 'CNY', last_week_date))
-			y_aud.append(cur.get_rate('AUD', 'CNY', last_week_date))
-			y_jpy.append(cur.get_rate('JPY', 'CNY', last_week_date))
-			last_week_date += datetime.timedelta(1)
+			x.append(last_month_date.strftime('%Y-%m-%d'))
+			y_usd.append(cur.get_rate('USD', 'CNY', last_month_date))
+			y_aud.append(cur.get_rate('AUD', 'CNY', last_month_date))
+			y_jpy.append(cur.get_rate('JPY', 'CNY', last_month_date))
+			last_month_date += datetime.timedelta(1)
 			count_date += 1
 		return (x, y_usd, y_aud, y_jpy)
 
@@ -58,7 +58,7 @@ class Reminder(object):
 		plt.plot(x, y, color=line_color, alpha=0.7)
 		plt.xlabel('Date')
 		plt.ylabel('Equivalent CNY')
-		plt.title(currency + ' to CNY Weekly Report')
+		plt.title(currency + ' to CNY Monthly Report')
 		# fix x axis labels overlap
 		ax.xaxis.set_major_locator(plt.NullLocator())
 
@@ -134,10 +134,10 @@ class Reminder(object):
 			log_jpy = str(cur.get_rate('JPY', 'CNY', now_time))
 			data_list = [log_usd, log_aud, log_jpy]
 			self.write_log(str(cur.get_rates('CNY', now_time)))
-			last_week_data = self.get_last_month_data()
-			self.visualize(last_week_data[0], last_week_data[1], 'USD','skyblue', 'slateblue', min(last_week_data[1]) - 0.1, max(last_week_data[1]) + 0.1)
-			self.visualize(last_week_data[0], last_week_data[2], 'AUD','darkgreen', 'limegreen', min(last_week_data[2]) - 0.1, max(last_week_data[2]) + 0.1)
-			self.visualize(last_week_data[0], last_week_data[3], 'JPY','orangered', 'salmon', min(last_week_data[3]) - 0.01, max(last_week_data[3]) + 0.01)
+			last_month_data = self.get_last_month_data()
+			self.visualize(last_month_data[0], last_month_data[1], 'USD','skyblue', 'slateblue', min(last_month_data[1]) - 0.1, max(last_month_data[1]) + 0.1)
+			self.visualize(last_month_data[0], last_month_data[2], 'AUD','darkgreen', 'limegreen', min(last_month_data[2]) - 0.1, max(last_month_data[2]) + 0.1)
+			self.visualize(last_month_data[0], last_month_data[3], 'JPY','orangered', 'salmon', min(last_month_data[3]) - 0.01, max(last_month_data[3]) + 0.01)
 
 			message_usd = '1 USD = ' + log_usd + ' CNY\n'
 			message_aud = '1 AUD = ' + log_aud + ' CNY\n'
